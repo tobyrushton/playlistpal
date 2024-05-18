@@ -2,7 +2,11 @@
 export default {
   content: ['packages/web/templates/**/*.templ'],
   theme: {
-    extend: {},
+    extend: {
+      colors: {
+        ternary: '#F1F2F6',
+      }
+    },
   },
   plugins: [],
 }

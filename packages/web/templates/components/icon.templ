@@ -1,0 +1,15 @@
+package components
+
+import "os"
+
+templ Icon(name string, class string) {
+    <i data-lucide={name} class={class}></i>
+    if os.Getenv("env") == "production" {
+        <script src="https://unpkg.com/lucide@latest"></script>
+    } else {
+        <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+    }
+    <script>
+        lucide.createIcons()
+    </script>
+}
