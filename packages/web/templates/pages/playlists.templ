@@ -13,8 +13,8 @@ templ Playlists(playlists []spotify.SimplePlaylist){
 				Get personalized song recommendations based on your favorite playlists.
 			</p>
             <div class="grid gap-6">
-                for _, playlist := range playlists {
-                    @components.Playlist(playlist)
+                for i, playlist := range playlists {
+                    @components.Playlist(playlist, i)
                 }
             </div>
         </section>
