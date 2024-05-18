@@ -1,0 +1,22 @@
+package pages
+
+import "github.com/zmb3/spotify/v2"
+import "github.com/tobyrushton/playlistpal/packages/web/templates/components"
+
+templ Playlists(playlists []spotify.SimplePlaylist){
+    <main class="flex flex-col w-full">
+        <section class="flex flex-col items-center space-y-2 py-12 md:py-24 lg:py-32 xl:py-48 text-center px-4">
+            <h1 class="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl lg:text-6xl/none">
+				Your Playlists
+			</h1>
+			<p class="mx-auto max-w-[700px] text-gray-500 md:text-xl dark:text-gray-400">
+				Get personalized song recommendations based on your favorite playlists.
+			</p>
+            <div class="grid gap-6">
+                for _, playlist := range playlists {
+                    @components.Playlist(playlist)
+                }
+            </div>
+        </section>
+    </main>
+}

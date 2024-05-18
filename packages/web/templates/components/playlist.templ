@@ -1,0 +1,20 @@
+package components
+
+import "github.com/zmb3/spotify/v2"
+
+templ Playlist(playlist spotify.SimplePlaylist) {
+    <div class="relative group">
+        <div class="flex items-center gap-3 rounded bg-ternary p-6 transition-colors group-hover:bg-gray-200">
+            <img src={playlist.Images[0].URL} class="size-16 rounded-lg" />
+            <div class="text-left flex flex-col grow">
+                <h3 class="text-lg font-semibold text-red">{playlist.Name}</h3>
+                if playlist.Description != "" {
+                    <p class="text-sm text-gray-500 dark:text-gray-400">{playlist.Description}</p>
+                }
+            </div>
+            <button class="text-sm p-2 border border-gray-400 rounded"> // TODO
+                Get Suggestions
+            </button>
+        </div>
+    </div>
+}

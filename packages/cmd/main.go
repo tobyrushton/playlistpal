@@ -36,6 +36,7 @@ func main() {
 
 	r.Group(func(r chi.Router) {
 		r.Get("/", handlers.NewHomeHandler().ServeHTTP)
+		r.Get("/playlists", handlers.NewPlaylistsHandler().ServeHTTP)
 	})
 
 	killSig := make(chan os.Signal, 1)
