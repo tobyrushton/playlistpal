@@ -39,6 +39,7 @@ func main() {
 		r.Get("/playlists", handlers.NewPlaylistsHandler().ServeHTTP)
 		r.Get("/api/suggestions/{playlistID}", handlers.NewSuggestionsHandler().ServeHTTP)
 		r.Post("/api/add/{playlistID}", handlers.NewAddHandler().ServeHTTP)
+		r.Get("/login", handlers.NewLoginHandler().ServeHTTP)
 	})
 
 	killSig := make(chan os.Signal, 1)

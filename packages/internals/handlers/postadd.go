@@ -1,14 +1,13 @@
 package handlers
 
 import (
-	"context"
+	"fmt"
 	"net/http"
 
 	"github.com/go-chi/chi/v5"
-	"github.com/tobyrushton/playlistpal/packages/internals/config"
+	"github.com/tobyrushton/playlistpal/packages/internals/auth"
 	"github.com/zmb3/spotify/v2"
-	spotifyauth "github.com/zmb3/spotify/v2/auth"
-	"golang.org/x/oauth2/clientcredentials"
+	"golang.org/x/net/context"
 )
 
 type AddHandler struct{}
@@ -27,25 +26,16 @@ func (h *AddHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	}
 
 	ctx := context.Background()
-	cfg := config.MustLoadConfig()
 
-	config := &clientcredentials.Config{
-		ClientID:     cfg.SpotifyID,
-		ClientSecret: cfg.SpotifySecret,
-		TokenURL:     spotifyauth.TokenURL,
-	}
-
-	token, err := config.Token(ctx)
+	client, err := auth.New().GetAuthenticatedClient(r)
 	if err != nil {
-		http.Error(w, "Error getting token", http.StatusInternalServerError)
+		http.Error(w, "Error getting client", http.StatusInternalServerError)
 		return
 	}
 
-	httpClient := spotifyauth.New().Client(ctx, token)
-	client := spotify.New(httpClient)
-
 	_, err = client.AddTracksToPlaylist(ctx, spotify.ID(playlistID), spotify.ID(songId))
 	if err != nil {
+		fmt.Println(err)
 		http.Error(w, "Error adding song to playlist", http.StatusInternalServerError)
 		return
 	}
