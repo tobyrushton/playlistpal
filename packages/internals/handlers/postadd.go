@@ -6,21 +6,26 @@ import (
 
 	"github.com/go-chi/chi/v5"
 	"github.com/tobyrushton/playlistpal/packages/internals/config"
-	"github.com/tobyrushton/playlistpal/packages/internals/finder"
-	"github.com/tobyrushton/playlistpal/packages/web/templates/components"
 	"github.com/zmb3/spotify/v2"
 	spotifyauth "github.com/zmb3/spotify/v2/auth"
 	"golang.org/x/oauth2/clientcredentials"
 )
 
-type SuggestionsHandler struct{}
+type AddHandler struct{}
 
-func NewSuggestionsHandler() *SuggestionsHandler {
-	return &SuggestionsHandler{}
+func NewAddHandler() *AddHandler {
+	return &AddHandler{}
 }
 
-func (h *SuggestionsHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+func (h *AddHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	playlistID := chi.URLParam(r, "playlistID")
+	songId := r.URL.Query().Get("songId")
+
+	if songId == "" {
+		http.Error(w, "No songId provided", http.StatusBadRequest)
+		return
+	}
+
 	ctx := context.Background()
 	cfg := config.MustLoadConfig()
 
@@ -39,17 +44,11 @@ func (h *SuggestionsHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	httpClient := spotifyauth.New().Client(ctx, token)
 	client := spotify.New(httpClient)
 
-	finder := finder.New(client, r, playlistID)
-	suggestions, err := finder.Find()
-
+	_, err = client.AddTracksToPlaylist(ctx, spotify.ID(playlistID), spotify.ID(songId))
 	if err != nil {
-		http.Error(w, "Error getting playlist", http.StatusInternalServerError)
+		http.Error(w, "Error adding song to playlist", http.StatusInternalServerError)
 		return
 	}
 
-	err = components.SongList(suggestions, playlistID).Render(r.Context(), w)
-	if err != nil {
-		http.Error(w, "Error rendering song list", http.StatusInternalServerError)
-		return
-	}
+	w.WriteHeader(http.StatusOK)
 }

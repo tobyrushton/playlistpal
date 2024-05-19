@@ -27,7 +27,7 @@ func (h *PlaylistsHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 
 	auth := spotifyauth.New(
 		spotifyauth.WithRedirectURL(redirectUrl),
-		spotifyauth.WithScopes(spotifyauth.ScopeUserReadPrivate),
+		spotifyauth.WithScopes(spotifyauth.ScopeUserReadPrivate, spotifyauth.ScopePlaylistModifyPrivate, spotifyauth.ScopePlaylistModifyPublic),
 		spotifyauth.WithClientID(cfg.SpotifyID),
 	)
 
