@@ -3,11 +3,14 @@ package components
 import "github.com/zmb3/spotify/v2"
 
 templ Song(song spotify.SimpleTrack) {
-    <div class="flex gap-2 p-2 items-center">
-        <img src={song.Album.Images[0].URL} class="size-12 rounded" />
+    <div class="flex gap-2 p-2 items-center w-full grow">
+        <img src={song.Album.Images[0].URL} class="size-14 rounded" />
         <div class="flex flex-col text-left">
-            <h4 class="font-bold">{song.Name}</h4>
-            <p class="text-sm text-gray-500 dark:text-gray-400">{song.Artists[0].Name}</p>
+            <h4 class="font-bold text-sm">{song.Name}</h4>
+            <p class="text-xs text-gray-500 dark:text-gray-400">{song.Artists[0].Name}</p>
+            <audio controls>
+                <source src={song.PreviewURL} type="audio/mpeg" />
+            </audio>
         </div>
     </div>
 }

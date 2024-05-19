@@ -1,11 +1,12 @@
 package components
 
 import "github.com/zmb3/spotify/v2"
+import "fmt"
 
 templ Playlist(playlist spotify.SimplePlaylist, index int) {
-    <div>
+    <div class="bg-ternary rounded">
         <div class="relative group">
-            <div class="flex items-center gap-3 rounded bg-ternary p-6 transition-colors group-hover:bg-gray-200">
+            <div class="flex items-center gap-3 p-6 transition-colors group-hover:bg-gray-200">
                 <img src={playlist.Images[0].URL} class="size-16 rounded-lg" />
                 <div class="text-left flex flex-col grow">
                     <h3 class="text-lg font-semibold text-red">{playlist.Name}</h3>
@@ -18,12 +19,16 @@ templ Playlist(playlist spotify.SimplePlaylist, index int) {
                     hx-get={"/api/suggestions/" + string(playlist.ID)}
                     hx-target={"#suggestion-box-" + string(playlist.ID)}
                     hx-swap="innerHTML"
+                    hx-indicator={"#spinner-" + string(playlist.ID)}
                 >
                     Get Suggestions
                 </button>
             </div>
         </div>
         <div id={"suggestion-box-" + string(playlist.ID)}>
+            <div class="flex w-full justify-center p-8 htmx-indicator" id={fmt.Sprintf("spinner-%s", playlist.ID)}>
+                @Spinner()
+            </div>
         </div>
     </div>
 }
