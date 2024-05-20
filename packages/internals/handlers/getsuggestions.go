@@ -1,7 +1,6 @@
 package handlers
 
 import (
-	"fmt"
 	"net/http"
 
 	"github.com/go-chi/chi/v5"
@@ -21,14 +20,14 @@ func (h *SuggestionsHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 
 	client, err := auth.New().GetAuthenticatedClient(r)
 	if err != nil {
-		fmt.Println(err)
 		http.Error(w, "Error getting client", http.StatusInternalServerError)
 		return
 	}
+
 	finder := finder.New(client, r, playlistID)
 	suggestions, err := finder.Find()
 
-	if err != nil {
+	if err != nil || len(suggestions) == 0 {
 		http.Error(w, "Error getting playlist", http.StatusInternalServerError)
 		return
 	}

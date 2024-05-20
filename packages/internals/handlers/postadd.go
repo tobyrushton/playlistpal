@@ -6,8 +6,8 @@ import (
 
 	"github.com/go-chi/chi/v5"
 	"github.com/tobyrushton/playlistpal/packages/internals/auth"
+	"github.com/tobyrushton/playlistpal/packages/web/templates/components"
 	"github.com/zmb3/spotify/v2"
-	"golang.org/x/net/context"
 )
 
 type AddHandler struct{}
@@ -25,7 +25,7 @@ func (h *AddHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	ctx := context.Background()
+	ctx := r.Context()
 
 	client, err := auth.New().GetAuthenticatedClient(r)
 	if err != nil {
@@ -40,5 +40,9 @@ func (h *AddHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	w.WriteHeader(http.StatusOK)
+	err = components.AddedSuccess().Render(ctx, w)
+	if err != nil {
+		http.Error(w, "Error rendering success message", http.StatusInternalServerError)
+		return
+	}
 }

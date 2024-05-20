@@ -26,9 +26,9 @@ templ Playlist(playlist spotify.SimplePlaylist, index int) {
             </div>
         </div>
         <div id={"suggestion-box-" + string(playlist.ID)}>
-            <div class="flex w-full justify-center p-8 htmx-indicator" id={fmt.Sprintf("spinner-%s", playlist.ID)}>
-                @Spinner()
-            </div>
+        </div>
+        <div class="flex w-full justify-center p-8 htmx-indicator" id={fmt.Sprintf("spinner-%s", playlist.ID)}>
+            @Spinner()
         </div>
     </div>
 }

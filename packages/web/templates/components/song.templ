@@ -18,6 +18,7 @@ templ Song(song spotify.SimpleTrack, playlistID string) {
         <button
             class="text-sm p-2 border border-gray-400 rounded self-right w-full sm:w-fit"
             hx-post={fmt.Sprintf("/api/add/%s?songId=%s", playlistID, song.ID)}
+            hx-swap="outerHTML"
         >
             Add to playlist
         </button>
