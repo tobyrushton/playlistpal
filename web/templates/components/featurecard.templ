@@ -1,10 +1,10 @@
 package components
 
-templ FeatureCard(icon string, title string, content string) {
+templ FeatureCard(icon func(string) templ.Component, title string, content string) {
     <div class="flex flex-col justify-center space-y-4">
         <div class="grid gap-1">
             <div class="flex items-center gap-2">
-                @Icon("music", "h-6 w-6 text-gray-500 dark:text-gray-400")
+                @icon("h-6 w-6 text-gray-500 dark:text-gray-400")
                 <h3 class="text-xl font-bold">{title}</h3>
             </div>
             <p class="text-gray-500 dark:text-gray-400">

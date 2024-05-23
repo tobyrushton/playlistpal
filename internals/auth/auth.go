@@ -6,6 +6,7 @@ import (
 	"encoding/json"
 	"errors"
 	"net/http"
+	"os"
 
 	"github.com/tobyrushton/playlistpal/internals/config"
 	"github.com/zmb3/spotify/v2"
@@ -18,8 +19,14 @@ type Auth struct {
 }
 
 func New() *Auth {
-	return &Auth{
-		RedirectUrl: "http://localhost:8080/login",
+	if os.Getenv("env") == "production" {
+		return &Auth{
+			RedirectUrl: "https//playlistpal.tobyrushton.com/login",
+		}
+	} else {
+		return &Auth{
+			RedirectUrl: "http://localhost:8080/login",
+		}
 	}
 }
 
