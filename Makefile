@@ -26,7 +26,6 @@ build:
 	make tailwind-build
 	go install github.com/a-h/templ/cmd/templ@latest
 	make templ-generate
-	go build 
 
 .PHONY: vet
 vet:

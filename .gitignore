@@ -19,3 +19,4 @@ tailwindcss
 style.*
 tmp
 *.env
+.vercel
