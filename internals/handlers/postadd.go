@@ -5,8 +5,8 @@ import (
 	"net/http"
 
 	"github.com/go-chi/chi/v5"
-	"github.com/tobyrushton/playlistpal/packages/internals/auth"
-	"github.com/tobyrushton/playlistpal/packages/web/templates/components"
+	"github.com/tobyrushton/playlistpal/internals/auth"
+	"github.com/tobyrushton/playlistpal/web/templates/components"
 	"github.com/zmb3/spotify/v2"
 )
 

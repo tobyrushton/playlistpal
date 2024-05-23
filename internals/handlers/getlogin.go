@@ -3,7 +3,7 @@ package handlers
 import (
 	"net/http"
 
-	"github.com/tobyrushton/playlistpal/packages/internals/auth"
+	"github.com/tobyrushton/playlistpal/internals/auth"
 )
 
 type LoginHandler struct{}

@@ -10,9 +10,8 @@ import (
 	"syscall"
 	"time"
 
-	"github.com/go-chi/chi/v5"
-	"github.com/tobyrushton/playlistpal/packages/internals/config"
-	"github.com/tobyrushton/playlistpal/packages/internals/handlers"
+	"github.com/tobyrushton/playlistpal/internals/config"
+	"github.com/tobyrushton/playlistpal/internals/router"
 )
 
 /*
@@ -27,20 +26,9 @@ func init() {
 
 func main() {
 	logger := slog.New(slog.NewJSONHandler(os.Stdout, nil))
-	r := chi.NewRouter()
+	r := router.NewRouter()
 
 	cfg := config.MustLoadConfig()
-
-	fileServer := http.FileServer(http.Dir("./packages/web/static"))
-	r.Handle("/static/*", http.StripPrefix("/static/", fileServer))
-
-	r.Group(func(r chi.Router) {
-		r.Get("/", handlers.NewHomeHandler().ServeHTTP)
-		r.Get("/playlists", handlers.NewPlaylistsHandler().ServeHTTP)
-		r.Get("/api/suggestions/{playlistID}", handlers.NewSuggestionsHandler().ServeHTTP)
-		r.Post("/api/add/{playlistID}", handlers.NewAddHandler().ServeHTTP)
-		r.Get("/login", handlers.NewLoginHandler().ServeHTTP)
-	})
 
 	killSig := make(chan os.Signal, 1)
 
