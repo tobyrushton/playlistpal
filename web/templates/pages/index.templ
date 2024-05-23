@@ -16,9 +16,9 @@ templ Index() {
 		<section class="bg-ternary py-12 md:py-24 lg:py-32 flex lg:justify-center">
 			<div class="container px-4 md:px-6">
 				<div class="mx-auto grid max-w-5xl items-center gap-6 lg:grid-cols-3 lg:gap-12">
-					@components.FeatureCard("music", "Discover New Music", "Get personalized song recommendations based on your favorite playlists.")
-					@components.FeatureCard("list-music", "Playlist Integration", "Seamlessly integrate your favorite playlists to get started.")
-					@components.FeatureCard("search", "Discover New Artists", "Expand your music horizons with recommendations for new artists.")
+					@components.FeatureCard(components.MusicIcon, "Discover New Music", "Get personalized song recommendations based on your favorite playlists.")
+					@components.FeatureCard(components.ListMusicIcon, "Playlist Integration", "Seamlessly integrate your favorite playlists to get started.")
+					@components.FeatureCard(components.SearchIcon, "Discover New Artists", "Expand your music horizons with recommendations for new artists.")
 				</div>
 			</div>
 		</section>
