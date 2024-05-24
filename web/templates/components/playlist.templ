@@ -20,6 +20,7 @@ templ Playlist(playlist spotify.SimplePlaylist, index int) {
                     hx-target={"#suggestion-box-" + string(playlist.ID)}
                     hx-swap="innerHTML"
                     hx-indicator={"#spinner-" + string(playlist.ID)}
+                    _={"on click if #song-list-" + string(playlist.ID) + " exists set #song-list-" + string(playlist.ID) + "'s *display to 'none'"}
                 >
                     Get Suggestions
                 </button>

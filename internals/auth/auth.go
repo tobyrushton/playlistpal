@@ -21,7 +21,7 @@ type Auth struct {
 func New() *Auth {
 	if os.Getenv("env") == "production" {
 		return &Auth{
-			RedirectUrl: "https//playlistpal.tobyrushton.com/login",
+			RedirectUrl: "https://playlistpal.tobyrushton.com/login",
 		}
 	} else {
 		return &Auth{
