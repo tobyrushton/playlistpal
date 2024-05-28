@@ -7,9 +7,11 @@ templ Playlist(playlist spotify.SimplePlaylist, index int) {
     <div class="bg-ternary rounded">
         <div class="relative group">
             <div class="flex items-center gap-3 p-6 transition-colors group-hover:bg-gray-200">
-                <img src={playlist.Images[0].URL} class="size-16 rounded-lg" />
+                <img src={playlist.Images[0].URL} class="size-16" />
                 <div class="text-left flex flex-col grow">
-                    <h3 class="text-lg font-semibold text-red">{playlist.Name}</h3>
+                    <a href={templ.URL(playlist.ExternalURLs["spotify"])} target="_blank">
+                        <h3  class="text-lg font-semibold text-red">{playlist.Name}</h3>
+                    </a>
                     if playlist.Description != "" {
                         <p class="text-sm text-gray-500 dark:text-gray-400">{playlist.Description}</p>
                     }
