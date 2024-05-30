@@ -35,3 +35,9 @@ templ Playlist(playlist spotify.SimplePlaylist, index int) {
         </div>
     </div>
 }
+
+templ PlaylistList(playlists []spotify.SimplePlaylist) {
+    for i, playlist := range playlists {
+        @Playlist(playlist, i)
+    }
+}
