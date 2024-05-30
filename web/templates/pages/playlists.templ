@@ -12,14 +12,13 @@ templ Playlists(){
 				Get personalized song recommendations based on your favorite playlists.
 			</p>
             <div 
-                class="grid gap-6"
+                class="grid gap-6 max-w-[700px] w-full"
                 hx-get="/api/playlists"
                 hx-trigger="load"
-                hx-indicator="#playlist-spinner"
             >
-                <div class="flex w-full justify-center p-8 htmx-indicator" id="playlist-spinner">
-                    @components.Spinner()
-                </div>
+                for i := 0; i < 5; i++ {
+                    @components.PlaylistSkeleton()
+                }
             </div>
         </section>
     </main>

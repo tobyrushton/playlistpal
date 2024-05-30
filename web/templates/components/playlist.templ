@@ -30,7 +30,7 @@ templ Playlist(playlist spotify.SimplePlaylist, index int) {
         </div>
         <div id={"suggestion-box-" + string(playlist.ID)}>
         </div>
-        <div class="flex w-full justify-center p-8 htmx-indicator" id={fmt.Sprintf("spinner-%s", playlist.ID)}>
+        <div class="flex w-full justify-center p-8 spinner-indicator" id={fmt.Sprintf("spinner-%s", playlist.ID)}>
             @Spinner()
         </div>
     </div>
@@ -40,4 +40,18 @@ templ PlaylistList(playlists []spotify.SimplePlaylist) {
     for i, playlist := range playlists {
         @Playlist(playlist, i)
     }
+}
+
+templ PlaylistSkeleton() {
+    <div class="bg-ternary rounded w-full">
+        <div class="relative group animate-pulse"> 
+            <div class="flex items-center gap-3 p-6 transition-colors group-hover:bg-gray-200">
+                <div class="bg-slate-300 size-16 rounded" />
+                <div class="grid w-full gap-2">
+                    <div class="block min-h-6 bg-slate-300 rounded w-1/3" />
+                    <div class="block min-h-4 bg-slate-300 rounded w-2/3" />
+                </div> 
+           </div> 
+        </div>
+    </div>
 }
