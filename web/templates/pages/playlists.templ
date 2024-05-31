@@ -4,21 +4,50 @@ import "github.com/tobyrushton/playlistpal/web/templates/components"
 
 templ Playlists(){
     <main class="flex flex-col w-full">
-        <section class="flex flex-col items-center space-y-2 py-12 md:py-24 lg:py-32 xl:py-48 text-center px-4">
-            <h1 class="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl lg:text-6xl/none">
-				Your Playlists
-			</h1>
-			<p class="mx-auto max-w-[700px] text-gray-500 md:text-xl dark:text-gray-400">
-				Get personalized song recommendations based on your favorite playlists.
-			</p>
+        <div class="relative flex justify-between w-full self-center max-w-[700px] text-xl border-b-2 border-ternary border-solid mt-6">
             <div 
-                class="grid gap-6 max-w-[700px] w-full"
-                hx-get="/api/playlists"
-                hx-trigger="load"
+                id="slider"
+                class="absolute inset-y-0 w-1/2 h-full transition-transform transform cursor-pointer border-b-2 border-solid border-black"
+            />
+            <button
+                class="w-1/2 text-center p-2"
+                _="on click set #slider's *transform to 'translateX(0)' then set #tab-one's *display to 'block' then set #tab-two's *display to 'none'"
             >
-                for i := 0; i < 5; i++ {
-                    @components.PlaylistSkeleton()
-                }
+                New Playlist
+            </button>
+            <button
+                class="w-1/2 text-center p-2"
+                _="on click set #slider's *transform to 'translateX(100%)' then set #tab-two's *display to 'block' then set #tab-one's *display to 'none'"
+            >
+                Existing Playlists
+            </button>
+        </div>
+        <section class="flex flex-col items-center py-4 md:py-8 lg:py-12 xl:py-24 text-center px-4">
+            <div id="tab-one" class="flex flex-col space-y-2">
+                <h1 class="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl lg:text-6xl/none">
+                    New Playlist
+                </h1>
+                <p class="mx-auto max-w-[700px] text-gray-500 md:text-xl dark:text-gray-400">
+                    Create a new playlist based on your favorite songs.
+                </p>
+                @components.Form()
+            </div>
+            <div class="hidden flex flex-col space-y-2" id="tab-two">
+                <h1 class="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl lg:text-6xl/none">
+                    Your Playlists
+                </h1>
+                <p class="mx-auto max-w-[700px] text-gray-500 md:text-xl dark:text-gray-400">
+                    Get personalized song recommendations based on your favorite playlists.
+                </p>
+                <div 
+                    class="grid gap-6 max-w-[700px] w-full"
+                    hx-get="/api/playlists"
+                    hx-trigger="intersect once"
+                >
+                    for i := 0; i < 5; i++ {
+                        @components.PlaylistSkeleton()
+                    }
+                </div>        
             </div>
         </section>
     </main>

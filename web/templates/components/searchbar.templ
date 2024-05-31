@@ -1,0 +1,46 @@
+package components
+
+import "github.com/zmb3/spotify/v2"
+import "fmt"
+
+templ Searchbar() {
+    <div class="relative w-full p-2">
+        <input
+            id="searchbar"
+            name="q"
+            class="w-full p-2 border border-ternaryrounded-lg"
+            type="search" 
+            placeholder="Search for songs"
+            hx-get="/api/search"
+            hx-trigger="keyup changed delay:200ms"
+            hx-target="#song-dropdown"
+            hx-swap="outerHTML"
+        />
+        @EmptySongDropDown()
+    </div>
+}
+
+templ EmptySongDropDown() {
+    <div id="song-dropdown" />
+}
+
+templ SongDropDown(songs []spotify.FullTrack) {
+    <div id="song-dropdown" class="flex flex-col rounded-md shadow absolute bg-white z-10 w-full">
+        for _, song := range songs {
+            <button
+                class="flex gap-2 p-2 hover:bg-gray-200"
+                hx-post={fmt.Sprintf("/api/add-song/%s", song.ID)}
+                hx-trigger="click"
+                hx-target="#song-list"
+                hx-swap="beforeend"
+                _="on click set #song-dropdown's innerHTML to '' then set #searchbar's value to ''"
+            >
+                <img src={song.Album.Images[0].URL} class="size-10" />
+                <div class="flex flex-col text-left">
+                    <p>{song.Name}</p>
+                    <p class="text-sm text-gray-500">{song.Artists[0].Name}</p>
+                </div>
+            </button>
+        }
+    </div>
+}
