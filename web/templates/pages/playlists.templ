@@ -31,6 +31,10 @@ templ Playlists(){
                     Create a new playlist based on your favorite songs.
                 </p>
                 @components.Form()
+                <div id="create-playlist-output" />
+                <div id="create-playlist-spinner" class="flex w-full justify-center p-8 spinner-indicator">
+                    @components.Spinner()
+                </div>
             </div>
             <div class="hidden flex flex-col space-y-2" id="tab-two">
                 <h1 class="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl lg:text-6xl/none">

@@ -22,6 +22,7 @@ func NewRouter() *chi.Mux {
 		r.Get("/login", handlers.NewLoginHandler().ServeHTTP)
 		r.Get("/api/search", handlers.NewSearchHandler().ServeHTTP)
 		r.Post("/api/add-song/{songID}", handlers.NewAddSongHandler().ServeHTTP)
+		r.Post("/api/create-playlist", handlers.NewCreatePlaylistHandler().ServeHTTP)
 	})
 
 	return r

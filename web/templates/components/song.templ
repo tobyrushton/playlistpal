@@ -10,6 +10,9 @@ templ Song(song spotify.SimpleTrack, playlistID ...string) {
             <div class="flex flex-col text-left">
                 <a href={templ.SafeURL(song.ExternalURLs["spotify"])} target="_blank">
                     <h4 class="font-bold text-sm">{song.Name}</h4>
+                    if len(playlistID) == 0 {
+                        <input type="hidden" name="songs" value={string(song.ID)} />
+                    }
                 </a>
                 <a href={templ.SafeURL(song.Artists[0].ExternalURLs["spotify"])} target="_blank">
                     <p class="text-xs text-gray-500 dark:text-gray-400">{song.Artists[0].Name}</p>

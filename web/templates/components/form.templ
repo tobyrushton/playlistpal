@@ -8,6 +8,9 @@ templ Form() {
                 Selected songs
             </h3>
         </div>
+        <div id="spinner" class="flex w-full justify-center p-8 spinner-indicator">
+            @Spinner()
+        </div>
         <div class="flex justify-between">
             <input
                 name="name"
@@ -24,7 +27,17 @@ templ Form() {
                 min="10"
                 max="50"
             />
-            <button class="border-2 border-solid border-ternary p-2 rounded-md">
+            <button 
+                class="border-2 border-solid border-ternary p-2 rounded-md"
+                hx-trigger="click"
+                hx-post="api/create-playlist"
+                hx-params="name,amount,songs"
+                hx-target="#create-playlist-output"
+                hx-swap="innerHTML"
+                hx-on="htmx:beforeSwap console.log(event.detail.xhr.status)"
+                hx-indicator="#create-playlist-spinner"
+                _="on click set #create-playlist-output's innerHTML to ''"
+            >
                 Generate Playlist
             </button>
         </div>

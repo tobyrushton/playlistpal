@@ -33,6 +33,7 @@ templ SongDropDown(songs []spotify.FullTrack) {
                 hx-trigger="click"
                 hx-target="#song-list"
                 hx-swap="beforeend"
+                hx-indicator="#spinner"
                 _="on click set #song-dropdown's innerHTML to '' then set #searchbar's value to ''"
             >
                 <img src={song.Album.Images[0].URL} class="size-10" />
