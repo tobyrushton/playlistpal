@@ -3,30 +3,51 @@ package components
 import "github.com/zmb3/spotify/v2"
 import "fmt"
 
-templ Song(song spotify.SimpleTrack, playlistID string) {
-    <div class="flex flex-col sm:flex-row gap-2 p-2 items-center sm:justify-between">
+templ Song(song spotify.SimpleTrack, playlistID ...string) {
+    <div 
+        class={
+            "flex gap-2 p-2 items-center", 
+            templ.KV("flex-col sm:flex-row sm:justify-between", len(playlistID) > 0), 
+            templ.KV("flex-row justify-between", len(playlistID) == 0)
+        }
+    >
         <div class="flex gap-2 items-start">
-            <img src={song.Album.Images[0].URL} class="size-14 rounded" />
+            <img src={song.Album.Images[0].URL} class="size-14" />
             <div class="flex flex-col text-left">
-                <h4 class="font-bold text-sm">{song.Name}</h4>
-                <p class="text-xs text-gray-500 dark:text-gray-400">{song.Artists[0].Name}</p>
-                <audio controls>
-                    <source src={song.PreviewURL} type="audio/mpeg" />
-                </audio>
+                <a href={templ.SafeURL(song.ExternalURLs["spotify"])} target="_blank">
+                    <h4 class="font-bold text-sm">{song.Name}</h4>
+                    if len(playlistID) == 0 {
+                        <input type="hidden" name="songs" value={string(song.ID)} />
+                    }
+                </a>
+                <a href={templ.SafeURL(song.Artists[0].ExternalURLs["spotify"])} target="_blank">
+                    <p class="text-xs text-gray-500 dark:text-gray-400">{song.Artists[0].Name}</p>
+                </a>
+                if len(song.PreviewURL) > 0 {
+                    <audio controls>
+                        <source src={song.PreviewURL} type="audio/mpeg" />
+                    </audio>
+                }
             </div>
         </div>
-        <button
-            class="text-sm p-2 border border-gray-400 rounded self-right w-full sm:w-fit"
-            hx-post={fmt.Sprintf("/api/add/%s?songId=%s", playlistID, song.ID)}
-            hx-swap="outerHTML"
-        >
-            Add to playlist
-        </button>
+        if len(playlistID) > 0 {
+            <button
+                class="text-sm p-2 border border-gray-400 rounded self-right w-full sm:w-fit"
+                hx-post={fmt.Sprintf("/api/add/%s?songId=%s", playlistID, song.ID)}
+                hx-swap="outerHTML"
+            >
+                Add to playlist
+            </button>
+        } else {
+            <button _="on click call event.preventDefault() remove me's parentElement">
+                @XIcon("size-4 text-gray-400")
+            </button>
+        }
     </div>
 }
 
 templ SongList(songs []spotify.SimpleTrack, playlistID string) {
-    <div class="flex flex-col gap-2 p-2">
+    <div class="flex flex-col gap-2 p-2" id={fmt.Sprintf("song-list-%s", playlistID)}>
         for _, song := range songs {
             @Song(song, playlistID)
         }

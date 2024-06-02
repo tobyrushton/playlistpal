@@ -11,11 +11,22 @@ templ Layout(contents templ.Component, title string) {
             <meta charset="UTF-8"/>
             <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
             <script src="https://unpkg.com/htmx.org@1.9.12" integrity="sha384-ujb1lZYygJmzgSwoxRggbCHcjc0rB2XoQrxeTUQyRjrOnlCoYta87iKBWq3EsdM2" crossorigin="anonymous"></script>
+            <script src="https://unpkg.com/hyperscript.org@0.9.12"></script>
             if os.Getenv("env") == "production" {
                 <link rel="stylesheet" href="static/css/style.min.css"/>
             } else {
                 <link rel="stylesheet" href="static/css/style.css" />
             }
+            <script>
+            document.addEventListener("DOMContentLoaded", (event) => {
+                document.body.addEventListener('htmx:beforeSwap', function(evt) {
+                    if (evt.detail.xhr.status === 400) {
+                        evt.detail.shouldSwap = true
+                        evt.detail.isError = false
+                    }
+                })
+            })
+            </script>
         </head>
         <body class="flex flex-col w-full min-h-screen">
             @components.Header()

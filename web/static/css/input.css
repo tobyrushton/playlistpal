@@ -2,10 +2,13 @@
 @tailwind components;
 @tailwind utilities;
 
-.htmx-indicator {
+.spinner-indicator {
   display: none;
 }
 
-.htmx-request {
+.htmx-request .spinner-indicator {
+  display: inline-flex;
+}
+.htmx-request.spinner-indicator {
   display: inline-flex;
 }

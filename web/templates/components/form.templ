@@ -1,0 +1,45 @@
+package components
+
+templ Form() {
+    <form class="flex flex-col w-full">
+        @Searchbar()
+        <div id="song-list" class="flex flex-col w-full gap-2">
+            <h3 class="font-semibold">
+                Selected songs
+            </h3>
+        </div>
+        <div id="spinner" class="flex w-full justify-center p-8 spinner-indicator">
+            @Spinner()
+        </div>
+        <div class="flex justify-between">
+            <input
+                name="name"
+                type="text"
+                placeholder="Playlist name"
+                class="p-2 border-b-2 border-solid border-ternary outline-none"
+                maxlength="100"
+            />
+            <input
+                name="amount"
+                type="number"
+                value="30"
+                class="p-2 border-b-2 border-solid border-ternary outline-none"
+                min="10"
+                max="50"
+            />
+            <button 
+                class="border-2 border-solid border-ternary p-2 rounded-md"
+                hx-trigger="click"
+                hx-post="api/create-playlist"
+                hx-params="name,amount,songs"
+                hx-target="#create-playlist-output"
+                hx-swap="innerHTML"
+                hx-on="htmx:beforeSwap console.log(event.detail.xhr.status)"
+                hx-indicator="#create-playlist-spinner"
+                _="on click set #create-playlist-output's innerHTML to ''"
+            >
+                Generate Playlist
+            </button>
+        </div>
+    </form>
+}

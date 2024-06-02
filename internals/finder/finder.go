@@ -165,6 +165,36 @@ func (f *Finder) groupTrackFeatures(tracks []Track) map[string][]Track {
 	return audioFeaturesMap
 }
 
+func (f *Finder) getTrackAttributes(val string) (*spotify.TrackAttributes, string) {
+	vals := strings.Split(val, "_")
+	// strToFloat := func(str string) float64 {
+	// 	f, _ := strconv.ParseFloat(str, 32)
+	// 	return float64(f)
+	// }
+
+	trackAttributes := spotify.NewTrackAttributes()
+	// MinDanceability(strToFloat(vals[0])).
+	// MaxDanceability(strToFloat(vals[1])).
+	// MinEnergy(strToFloat(vals[2])).
+	// MaxEnergy(strToFloat(vals[3])).
+	// MinLoudness(strToFloat(vals[4])).
+	// MaxLoudness(strToFloat(vals[5])).
+	// MinSpeechiness(strToFloat(vals[6])).
+	// MaxSpeechiness(strToFloat(vals[7])).
+	// MinAcousticness(strToFloat(vals[8])).
+	// MaxAcousticness(strToFloat(vals[9])).
+	// MinInstrumentalness(strToFloat(vals[10])).
+	// MaxInstrumentalness(strToFloat(vals[11])).
+	// MinLiveness(strToFloat(vals[12])).
+	// MaxLiveness(strToFloat(vals[13])).
+	// MinValence(strToFloat(vals[14])).
+	// MaxValence(strToFloat(vals[15])).
+	// MinTempo(strToFloat(vals[16])).
+	// MaxTempo(strToFloat(vals[17]))
+
+	return trackAttributes, vals[18]
+}
+
 func (f *Finder) Find() ([]spotify.SimpleTrack, error) {
 	tracks, err := f.getTracks()
 	if err != nil {
@@ -198,38 +228,8 @@ func (f *Finder) Find() ([]spotify.SimpleTrack, error) {
 		secondIndex = getRand()
 	}
 
-	getTrackAttributes := func(val string) (*spotify.TrackAttributes, string) {
-		vals := strings.Split(val, "_")
-		// strToFloat := func(str string) float64 {
-		// 	f, _ := strconv.ParseFloat(str, 32)
-		// 	return float64(f)
-		// }
-
-		trackAttributes := spotify.NewTrackAttributes()
-		// MinDanceability(strToFloat(vals[0])).
-		// MaxDanceability(strToFloat(vals[1])).
-		// MinEnergy(strToFloat(vals[2])).
-		// MaxEnergy(strToFloat(vals[3])).
-		// MinLoudness(strToFloat(vals[4])).
-		// MaxLoudness(strToFloat(vals[5])).
-		// MinSpeechiness(strToFloat(vals[6])).
-		// MaxSpeechiness(strToFloat(vals[7])).
-		// MinAcousticness(strToFloat(vals[8])).
-		// MaxAcousticness(strToFloat(vals[9])).
-		// MinInstrumentalness(strToFloat(vals[10])).
-		// MaxInstrumentalness(strToFloat(vals[11])).
-		// MinLiveness(strToFloat(vals[12])).
-		// MaxLiveness(strToFloat(vals[13])).
-		// MinValence(strToFloat(vals[14])).
-		// MaxValence(strToFloat(vals[15])).
-		// MinTempo(strToFloat(vals[16])).
-		// MaxTempo(strToFloat(vals[17]))
-
-		return trackAttributes, vals[18]
-	}
-
 	search := func(val, id string) (*spotify.Recommendations, error) {
-		trackAttributes, genre := getTrackAttributes(val)
+		trackAttributes, genre := f.getTrackAttributes(val)
 		seeds := spotify.Seeds{
 			Tracks: []spotify.ID{spotify.ID(id)},
 			Genres: []string{genre},
@@ -277,4 +277,50 @@ func (f *Finder) Find() ([]spotify.SimpleTrack, error) {
 	}
 
 	return combined, nil
+}
+
+func (f *Finder) FillNewPlaylist(count int) ([]spotify.SimpleTrack, error) {
+	tracks, err := f.getTracks()
+	if err != nil {
+		return nil, err
+	}
+
+	audioFeaturesMap := f.groupTrackFeatures(tracks)
+
+	// gather total number of items in map
+	length := len(audioFeaturesMap)
+	songsPerGenre := count / length
+	if songsPerGenre == 0 {
+		songsPerGenre = 1
+	}
+
+	newSongs := make([]spotify.SimpleTrack, 0, count)
+
+	for k, v := range audioFeaturesMap {
+		trackAttributes, genre := f.getTrackAttributes(k)
+		ids := make([]spotify.ID, 0)
+		for _, track := range v {
+			ids = append(ids, track.ID)
+		}
+		seeds := spotify.Seeds{
+			Tracks: ids,
+			Genres: []string{genre},
+		}
+		songsToGet := songsPerGenre
+		if count < songsPerGenre {
+			songsToGet = count
+		} else if count == 0 {
+			continue
+		}
+
+		recs, err := f.client.GetRecommendations(f.r.Context(), seeds, trackAttributes, spotify.Limit(songsToGet))
+		if err != nil {
+			return nil, err
+		}
+
+		count -= songsToGet
+		newSongs = append(newSongs, recs.Tracks...)
+	}
+
+	return newSongs, nil
 }
