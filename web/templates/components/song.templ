@@ -4,7 +4,13 @@ import "github.com/zmb3/spotify/v2"
 import "fmt"
 
 templ Song(song spotify.SimpleTrack, playlistID ...string) {
-    <div class="flex flex-col sm:flex-row gap-2 p-2 items-center sm:justify-between">
+    <div 
+        class={
+            "flex gap-2 p-2 items-center", 
+            templ.KV("flex-col sm:flex-row sm:justify-between", len(playlistID) > 0), 
+            templ.KV("flex-row justify-between", len(playlistID) == 0)
+        }
+    >
         <div class="flex gap-2 items-start">
             <img src={song.Album.Images[0].URL} class="size-14" />
             <div class="flex flex-col text-left">
@@ -31,6 +37,10 @@ templ Song(song spotify.SimpleTrack, playlistID ...string) {
                 hx-swap="outerHTML"
             >
                 Add to playlist
+            </button>
+        } else {
+            <button _="on click call event.preventDefault() remove me's parentElement">
+                @XIcon("size-4 text-gray-400")
             </button>
         }
     </div>
