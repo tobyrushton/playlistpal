@@ -2,6 +2,7 @@ package router
 
 import (
 	"net/http"
+	"os"
 
 	"github.com/go-chi/chi/v5"
 	"github.com/tobyrushton/playlistpal/internals/handlers"
@@ -10,8 +11,10 @@ import (
 func NewRouter() *chi.Mux {
 	r := chi.NewRouter()
 
-	fileServer := http.FileServer(http.Dir("./web/static"))
-	r.Handle("/static/*", http.StripPrefix("/static/", fileServer))
+	if os.Getenv("env") != "production" {
+		fileServer := http.FileServer(http.Dir("./web/static"))
+		r.Handle("/static/*", http.StripPrefix("/static/", fileServer))
+	}
 
 	r.Group(func(r chi.Router) {
 		r.Get("/", handlers.NewHomeHandler().ServeHTTP)
