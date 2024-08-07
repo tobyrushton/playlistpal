@@ -33,6 +33,7 @@ templ SongDropDown(songs []spotify.FullTrack) {
                 hx-trigger="click"
                 hx-target="#song-list"
                 hx-swap="beforeend"
+                hx-on::before-request="if (document.querySelector('#song-list').children.length > 5) { event.preventDefault(); alert('You can only add 5 songs at a time!'); }"
                 hx-indicator="#spinner"
                 _="on click set #song-dropdown's innerHTML to '' then set #searchbar's value to ''"
             >
