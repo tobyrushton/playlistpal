@@ -35,7 +35,7 @@ func (a *Auth) GetAuthClient() *spotifyauth.Authenticator {
 
 	return spotifyauth.New(
 		spotifyauth.WithRedirectURL(a.RedirectUrl),
-		spotifyauth.WithScopes(spotifyauth.ScopeUserReadPrivate, spotifyauth.ScopePlaylistModifyPrivate, spotifyauth.ScopePlaylistModifyPublic),
+		spotifyauth.WithScopes(spotifyauth.ScopePlaylistModifyPrivate, spotifyauth.ScopePlaylistModifyPublic),
 		spotifyauth.WithClientID(cfg.SpotifyID),
 		spotifyauth.WithClientSecret(cfg.SpotifySecret),
 	)
